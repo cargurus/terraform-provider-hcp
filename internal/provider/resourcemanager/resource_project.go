@@ -7,8 +7,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"net/http"
-
 	billing "github.com/hashicorp/hcp-sdk-go/clients/cloud-billing/preview/2020-11-05/client/billing_account_service"
 	billingModels "github.com/hashicorp/hcp-sdk-go/clients/cloud-billing/preview/2020-11-05/models"
 	"github.com/hashicorp/hcp-sdk-go/clients/cloud-resource-manager/stable/2019-12-10/client/project_service"
@@ -22,8 +20,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	clients "github.com/hashicorp/terraform-provider-hcp/internal/clients"
 	"github.com/hashicorp/terraform-provider-hcp/internal/hcpvalidator"
+	"net/http"
 )
 
 const (
@@ -86,6 +86,9 @@ The user or service account that is running Terraform when creating a %s resourc
 }
 
 func (r *resourceProject) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if true {
+		panic("test config")
+	}
 	if req.ProviderData == nil {
 		return
 	}
@@ -108,6 +111,9 @@ type Project struct {
 }
 
 func (r *resourceProject) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	if true {
+		panic("test create")
+	}
 	var plan Project
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -177,6 +183,9 @@ func (r *resourceProject) addToBillingAccount(ctx context.Context, projectID str
 }
 
 func (r *resourceProject) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	if true {
+		panic("test read")
+	}
 	var state Project
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
@@ -205,6 +214,9 @@ func (r *resourceProject) Read(ctx context.Context, req resource.ReadRequest, re
 }
 
 func (r *resourceProject) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	if true {
+		panic("test update")
+	}
 	var plan, state Project
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
@@ -247,6 +259,9 @@ func (r *resourceProject) Update(ctx context.Context, req resource.UpdateRequest
 }
 
 func (r *resourceProject) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	if true {
+		panic("test delete")
+	}
 	var state Project
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
 	if resp.Diagnostics.HasError() {
@@ -255,6 +270,8 @@ func (r *resourceProject) Delete(ctx context.Context, req resource.DeleteRequest
 
 	getParams := project_service.NewProjectServiceDeleteParams()
 	getParams.ID = state.ResourceID.ValueString()
+	resp.Diagnostics.AddError("HIHIHIHIHI DELETING PROJECT WOO", "JUST A TEAST")
+	tflog.Debug(ctx, "THIS IS NOT A DRILL")
 	_, err := r.client.Project.ProjectServiceDelete(getParams, nil)
 	if err != nil {
 		var deleteErr *project_service.ProjectServiceDeleteDefault
